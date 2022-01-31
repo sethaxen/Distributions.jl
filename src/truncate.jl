@@ -107,6 +107,16 @@ end
 ### Constructors of `Truncated` are deprecated - users should call `truncated`
 @deprecate Truncated(d::UnivariateDistribution, l::Real, u::Real) truncated(d, l, u)
 
+function truncated(d::Truncated, l::T, u::T) where {T<:Real}
+    return truncated(d.untruncated, max(l, d.lower), min(u, d.upper))
+end
+function truncated(d::Truncated, ::Nothing, u::Real)
+    return truncated(d.untruncated, d.lower, min(u, d.upper))
+end
+function truncated(d::Truncated, l::Real, ::Nothing)
+    return truncated(d.untruncated, max(l, d.lower), d.upper)
+end
+
 params(d::Truncated) = tuple(params(d.untruncated)..., d.lower, d.upper)
 partype(d::Truncated) = partype(d.untruncated)
 Base.eltype(::Type{Truncated{D, S, T} } ) where {D, S, T} = T
