@@ -2,6 +2,8 @@
 ##### Truncated exponential distribition
 #####
 
+truncated(d0::Exponential, l::Real, ::Nothing) = d0 + max(l, 0)
+
 function mean(d::Truncated{<:Exponential,Continuous})
     θ = d.untruncated.θ
     l, r = extrema(d)           # l is always finite
